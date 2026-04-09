@@ -5,4 +5,4 @@ from models import Task
 router = APIRouter()
 @router.get("/tasks")
 def get_tasks():
-    return {"message": "Lista zadań"}
+    return supabase.table("tasks").select("*").execute()
