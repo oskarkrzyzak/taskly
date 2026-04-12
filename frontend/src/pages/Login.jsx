@@ -7,7 +7,10 @@ function Login() {
 
     async function loginWithGoogle() {
         await supabase.auth.signInWithOAuth({
-            provider: 'google'
+            provider: 'google',
+            options: {
+                redirectTo: 'http://localhost:3000/dashboard'
+            }
         })
     }
     
