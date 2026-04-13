@@ -1,6 +1,8 @@
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import '../styles/Dashboard.css'
+import Calendar from '../components/Calendar'
+
 
 function Dashboard() {
     return (
@@ -9,7 +11,7 @@ function Dashboard() {
             <div className="main-content">
                 <Sidebar />
                 <div className="calendar">
-                    <h1>Calendar</h1>
+                    <Calendar />
                 </div>
             </div>
         </div>
