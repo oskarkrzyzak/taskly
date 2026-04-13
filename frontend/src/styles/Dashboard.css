@@ -9,3 +9,15 @@
 .calendar {
     flex: 1;
 }
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-cell {
+    border: 1px solid #ddd;
+    padding: 8px;
+    min-height: 60px;
+    border-radius: 4px;
+}
