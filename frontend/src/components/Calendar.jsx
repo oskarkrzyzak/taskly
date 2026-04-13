@@ -21,6 +21,11 @@ function Calendar() {
     const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
 
     const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+    const firstDayOfMonth = new Date(year, month, 1).getDay()
+    const startingDay = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1
+    const emptyDays = Array.from({ length: startingDay }, (_, i) => i)
+
     return (
         <div>
             <h2>{currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}</h2>
@@ -31,6 +36,9 @@ function Calendar() {
                     <div key={day} className="calendar-cell">
                         {day}
                     </div>
+                ))}
+                {emptyDays.map(i => (
+                    <div key={`empty-${i}`} className="calendar-cell empty"></div>
                 ))}
                 {days.map(day => (
                     <div key={day} className="calendar-cell">
