@@ -9,6 +9,6 @@ class Task(BaseModel):
     status: bool
     user_id: Optional[str] = None
     date: date
-    time: Optional[time] = None
+    time: Optional[str] = None
     color: Optional[str] = None
     priority: Optional[str] = None

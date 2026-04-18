@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import axios from 'axios'
 
 function TaskModal({ onClose, selectedDate }) {
     const [title, setTitle] = useState('')
@@ -6,6 +7,17 @@ function TaskModal({ onClose, selectedDate }) {
     const [description, setDescription] = useState('')
     const [priority, setPriority] = useState('low')
 
+    async function saveTask() {
+    await axios.post('http://127.0.0.1:8000/tasks', {
+        title: title,
+        date: selectedDate,
+        time: time ? time + ':00' : null,
+        description: description || null,
+        priority: priority,
+        status: false
+    })
+    onClose()
+}
     return (
         <div className="modal-overlay">
             <div className="modal">
@@ -39,7 +51,7 @@ function TaskModal({ onClose, selectedDate }) {
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
                 </select>
-                <button>Save Task</button>
+                <button onClick={saveTask}>Save Task</button>
             </div>
         </div>
     )
