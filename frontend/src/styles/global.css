@@ -28,3 +28,43 @@ input, textarea, select {
 input:focus, textarea:focus, select:focus {
     border-color: #378ADD;
 }
+.dark {
+    background-color: #1a1f2e;
+    color: #e0e0e0;
+}
+
+.dark nav {
+    background-color: #1a1f2e;
+    border-bottom: 1px solid #2d3348;
+}
+
+.dark .sidebar {
+    border-right: 1px solid #2d3348;
+    background-color: #1a1f2e;
+}
+
+.dark .calendar-cell {
+    border-color: #2d3348;
+    background-color: #1a1f2e;
+    color: #e0e0e0;
+}
+
+.dark .calendar-cell:hover {
+    background-color: #252b3d;
+}
+
+.dark .sidebar-task {
+    border-color: #2d3348;
+    background-color: #252b3d;
+}
+
+.dark .modal {
+    background-color: #1a1f2e;
+    color: #e0e0e0;
+}
+
+.dark input, .dark textarea, .dark select {
+    background-color: #252b3d;
+    border-color: #2d3348;
+    color: #e0e0e0;
+}
