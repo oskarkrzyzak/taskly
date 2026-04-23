@@ -1,21 +1,13 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useState } from 'react'
 import TaskModal from './TaskModal'
+import TaskDetail from './TaskDetail'
 
-function Calendar() {
+function Calendar({ tasks, onUpdate }) {
     const [currentDate, setCurrentDate] = useState(new Date())
     const [showModal, setShowModal] = useState(false)
+    const [showDetail, setShowDetail] = useState(false)
     const [selectedDay, setSelectedDay] = useState(null)
-    const [tasks, setTasks] = useState([])
-
-    useEffect(() => {
-        fetchTasks()
-    }, [])
-
-    async function fetchTasks() {
-        const response = await axios.get('http://127.0.0.1:8000/tasks')
-        setTasks(response.data.data)
-    }
+    const [selectedTask, setSelectedTask] = useState(null)
 
     function prevMonth() {
         const newDate = new Date(currentDate)
@@ -40,7 +32,18 @@ function Calendar() {
 
     function getTasksForDay(day) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-        return tasks.filter(task => task.date === dateStr)
+        return tasks.filter(task => task.date === dateStr && !task.status)
+    }
+
+    function handleDayClick(day) {
+        const dayTasks = getTasksForDay(day)
+        setSelectedDay(day)
+        if (dayTasks.length > 0) {
+            setSelectedTask(dayTasks[0])
+            setShowDetail(true)
+        } else {
+            setShowModal(true)
+        }
     }
 
     return (
@@ -61,10 +64,7 @@ function Calendar() {
                     <div
                         key={day}
                         className="calendar-cell"
-                        onClick={() => {
-                            setSelectedDay(day)
-                            setShowModal(true)
-                        }}
+                        onClick={() => handleDayClick(day)}
                     >
                         {day}
                         <div className="task-dots">
@@ -79,9 +79,16 @@ function Calendar() {
                 <TaskModal
                     onClose={() => {
                         setShowModal(false)
-                        fetchTasks()
+                        onUpdate()
                     }}
                     selectedDate={`${year}-${String(month + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`}
+                />
+            )}
+            {showDetail && selectedTask && (
+                <TaskDetail
+                    task={selectedTask}
+                    onClose={() => setShowDetail(false)}
+                    onUpdate={onUpdate}
                 />
             )}
         </div>
