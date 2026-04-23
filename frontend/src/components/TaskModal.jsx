@@ -8,50 +8,79 @@ function TaskModal({ onClose, selectedDate }) {
     const [priority, setPriority] = useState('low')
 
     async function saveTask() {
-    await axios.post('http://127.0.0.1:8000/tasks', {
-        title: title,
-        date: selectedDate,
-        time: time ? time + ':00' : null,
-        description: description || null,
-        priority: priority,
-        status: false
-    })
-    onClose()
-}
+        await axios.post('http://127.0.0.1:8000/tasks', {
+            title: title,
+            date: selectedDate,
+            time: time ? time + ':00' : null,
+            description: description || null,
+            priority: priority,
+            status: false
+        })
+        onClose()
+    }
+
     return (
         <div className="modal-overlay">
             <div className="modal">
-                <h2>Add Task</h2>
-                <button onClick={onClose}>X</button>
-                <input 
-                    type="text" 
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h2 style={{ fontSize: '18px', fontWeight: '600' }}>New Task</h2>
+                    <button onClick={onClose} style={{
+                        border: 'none',
+                        background: 'none',
+                        fontSize: '20px',
+                        cursor: 'pointer',
+                        color: '#888'
+                    }}>×</button>
+                </div>
+                <input
+                    type="text"
                     placeholder="Task title"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                 />
-                <input 
-                    type="date" 
-                    value={selectedDate} 
+                <input
+                    type="date"
+                    value={selectedDate}
                 />
-                <input 
+                <input
                     type="time"
                     value={time}
                     onChange={e => setTime(e.target.value)}
                 />
-                <textarea 
-                    placeholder="Description"
+                <textarea
+                    placeholder="Description (optional)"
                     value={description}
                     onChange={e => setDescription(e.target.value)}
+                    style={{ resize: 'none', height: '80px' }}
                 />
                 <select
                     value={priority}
                     onChange={e => setPriority(e.target.value)}
                 >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
+                    <option value="low">Low priority</option>
+                    <option value="medium">Medium priority</option>
+                    <option value="high">High priority</option>
                 </select>
-                <button onClick={saveTask}>Save Task</button>
+                <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                    <button onClick={onClose} style={{
+                        flex: 1,
+                        padding: '10px',
+                        borderRadius: '8px',
+                        border: '1px solid #e0e0e0',
+                        background: 'white',
+                        fontSize: '14px'
+                    }}>Cancel</button>
+                    <button onClick={saveTask} style={{
+                        flex: 1,
+                        padding: '10px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: '#378ADD',
+                        color: 'white',
+                        fontSize: '14px',
+                        fontWeight: '500'
+                    }}>Save Task</button>
+                </div>
             </div>
         </div>
     )
