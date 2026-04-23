@@ -8,8 +8,11 @@ import './styles/global.css'
 export const ThemeContext = React.createContext()
 
 function App() {
-    const [darkMode, setDarkMode] = useState(false)
+    const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('darkMode') === 'true'
+    })
 
+    
     return (
         <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
             <div className={darkMode ? 'dark' : 'light'}>

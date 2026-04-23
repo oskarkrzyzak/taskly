@@ -21,7 +21,7 @@ function Dashboard() {
         <div>
             <Navbar />
             <div className="main-content">
-                <Sidebar tasks={tasks} />
+                <Sidebar tasks={tasks} onUpdate={fetchTasks} />
                 <div className="calendar">
                     <Calendar tasks={tasks} onUpdate={fetchTasks} />
                 </div>
@@ -29,5 +29,6 @@ function Dashboard() {
         </div>
     )
 }
+
 
 export default Dashboard

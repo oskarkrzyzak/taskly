@@ -9,6 +9,14 @@ function Calendar({ tasks, onUpdate }) {
     const [selectedDay, setSelectedDay] = useState(null)
     const [selectedTask, setSelectedTask] = useState(null)
 
+    const today = new Date()
+
+    function isToday(day) {
+        return day === today.getDate() &&
+            currentDate.getMonth() === today.getMonth() &&
+            currentDate.getFullYear() === today.getFullYear()
+    }
+
     function prevMonth() {
         const newDate = new Date(currentDate)
         newDate.setMonth(currentDate.getMonth() - 1)
@@ -47,83 +55,83 @@ function Calendar({ tasks, onUpdate }) {
     }
 
     return (
-    <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-            <button onClick={prevMonth} style={{
-                border: '1px solid #e0e0e0',
-                background: 'white',
-                borderRadius: '8px',
-                width: '32px',
-                height: '32px',
-                fontSize: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>‹</button>
-            <h2 style={{ fontSize: '20px', fontWeight: '600', minWidth: '160px' }}>
-                {currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}
-            </h2>
-            <button onClick={nextMonth} style={{
-                border: '1px solid #e0e0e0',
-                background: 'white',
-                borderRadius: '8px',
-                width: '32px',
-                height: '32px',
-                fontSize: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>›</button>
-        </div>
-        <div className="calendar-grid">
-            {weekDays.map(day => (
-                <div key={day} style={{ 
-                    textAlign: 'center', 
-                    fontSize: '12px', 
-                    fontWeight: '600',
-                    color: '#888',
-                    padding: '8px 0',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em'
-                }}>
-                    {day}
-                </div>
-            ))}
-            {emptyDays.map(i => (
-                <div key={`empty-${i}`} className="calendar-cell empty"></div>
-            ))}
-            {days.map(day => (
-                <div
-                    key={day}
-                    className="calendar-cell"
-                    onClick={() => handleDayClick(day)}
-                >
-                    <span style={{ fontSize: '14px' }}>{day}</span>
-                    <div className="task-dots">
-                        {getTasksForDay(day).map(task => (
-                            <span key={task.id} className="task-dot"></span>
-                        ))}
+        <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                <button onClick={prevMonth} style={{
+                    border: '1px solid #e0e0e0',
+                    background: 'white',
+                    borderRadius: '8px',
+                    width: '32px',
+                    height: '32px',
+                    fontSize: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>‹</button>
+                <h2 style={{ fontSize: '20px', fontWeight: '600', minWidth: '160px' }}>
+                    {currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}
+                </h2>
+                <button onClick={nextMonth} style={{
+                    border: '1px solid #e0e0e0',
+                    background: 'white',
+                    borderRadius: '8px',
+                    width: '32px',
+                    height: '32px',
+                    fontSize: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>›</button>
+            </div>
+            <div className="calendar-grid">
+                {weekDays.map(day => (
+                    <div key={day} style={{
+                        textAlign: 'center',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        color: '#888',
+                        padding: '8px 0',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                    }}>
+                        {day}
                     </div>
-                </div>
-            ))}
+                ))}
+                {emptyDays.map(i => (
+                    <div key={`empty-${i}`} className="calendar-cell empty"></div>
+                ))}
+                {days.map(day => (
+                    <div
+                        key={day}
+                        className={`calendar-cell ${isToday(day) ? 'today' : ''}`}
+                        onClick={() => handleDayClick(day)}
+                    >
+                        <span style={{ fontSize: '14px' }}>{day}</span>
+                        <div className="task-dots">
+                            {getTasksForDay(day).map(task => (
+                                <span key={task.id} className="task-dot"></span>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+            {showModal && (
+                <TaskModal
+                    onClose={() => {
+                        setShowModal(false)
+                        onUpdate()
+                    }}
+                    selectedDate={`${year}-${String(month + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`}
+                />
+            )}
+            {showDetail && selectedTask && (
+                <TaskDetail
+                    task={selectedTask}
+                    onClose={() => setShowDetail(false)}
+                    onUpdate={onUpdate}
+                />
+            )}
         </div>
-        {showModal && (
-            <TaskModal
-                onClose={() => {
-                    setShowModal(false)
-                    onUpdate()
-                }}
-                selectedDate={`${year}-${String(month + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`}
-            />
-        )}
-        {showDetail && selectedTask && (
-            <TaskDetail
-                task={selectedTask}
-                onClose={() => setShowDetail(false)}
-                onUpdate={onUpdate}
-            />
-        )}
-    </div>
     )
 }
 

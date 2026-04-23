@@ -26,7 +26,10 @@ function Navbar() {
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <button
-                    onClick={() => setDarkMode(!darkMode)}
+                    onClick={() => {
+                        localStorage.setItem('darkMode', !darkMode)
+                        setDarkMode(!darkMode)
+                    }}
                     style={{
                         padding: '8px 16px',
                         borderRadius: '8px',
