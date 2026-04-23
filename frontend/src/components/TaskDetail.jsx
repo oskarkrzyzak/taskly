@@ -1,20 +1,24 @@
 import axios from 'axios'
+import supabase from '../supabaseClient'
 
-function TaskDetail({ task, onClose, onUpdate }) {
+async function authHeaders() {
+    const { data: { session } } = await supabase.auth.getSession()
+    return { Authorization: `Bearer ${session?.access_token}` }
+}
+
+function TaskDetail({ task, onClose, onUpdate, onPrev, onNext, taskIndex, totalTasks }) {
 
     async function markAsDone() {
         await axios.put(`http://127.0.0.1:8000/tasks/${task.id}`, {
             ...task,
             status: true
-        })
+        }, { headers: await authHeaders() })
         onUpdate()
-        onClose()
     }
 
     async function deleteTask() {
-        await axios.delete(`http://127.0.0.1:8000/tasks/${task.id}`)
+        await axios.delete(`http://127.0.0.1:8000/tasks/${task.id}`, { headers: await authHeaders() })
         onUpdate()
-        onClose()
     }
 
     return (
@@ -30,6 +34,35 @@ function TaskDetail({ task, onClose, onUpdate }) {
                         color: '#888'
                     }}>×</button>
                 </div>
+                {totalTasks > 1 && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#888' }}>
+                        <button
+                            onClick={onPrev}
+                            disabled={!onPrev}
+                            style={{
+                                border: '1px solid #e0e0e0',
+                                background: 'white',
+                                borderRadius: '6px',
+                                padding: '4px 8px',
+                                cursor: onPrev ? 'pointer' : 'not-allowed',
+                                opacity: onPrev ? 1 : 0.4
+                            }}
+                        >‹</button>
+                        <span>{taskIndex + 1} / {totalTasks}</span>
+                        <button
+                            onClick={onNext}
+                            disabled={!onNext}
+                            style={{
+                                border: '1px solid #e0e0e0',
+                                background: 'white',
+                                borderRadius: '6px',
+                                padding: '4px 8px',
+                                cursor: onNext ? 'pointer' : 'not-allowed',
+                                opacity: onNext ? 1 : 0.4
+                            }}
+                        >›</button>
+                    </div>
+                )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <p style={{ fontSize: '14px', color: '#666' }}>📅 {task.date}</p>
                     {task.time && <p style={{ fontSize: '14px', color: '#666' }}>🕐 {task.time}</p>}

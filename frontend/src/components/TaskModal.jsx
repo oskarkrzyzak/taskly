@@ -1,5 +1,11 @@
 import { useState } from 'react'
 import axios from 'axios'
+import supabase from '../supabaseClient'
+
+async function authHeaders() {
+    const { data: { session } } = await supabase.auth.getSession()
+    return { Authorization: `Bearer ${session?.access_token}` }
+}
 
 function TaskModal({ onClose, selectedDate }) {
     const [title, setTitle] = useState('')
@@ -15,7 +21,7 @@ function TaskModal({ onClose, selectedDate }) {
             description: description || null,
             priority: priority,
             status: false
-        })
+        }, { headers: await authHeaders() })
         onClose()
     }
 

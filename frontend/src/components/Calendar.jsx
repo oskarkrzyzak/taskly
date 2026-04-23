@@ -1,13 +1,10 @@
 import { useState } from 'react'
-import TaskModal from './TaskModal'
-import TaskDetail from './TaskDetail'
+import DayPanel from './DayPanel'
 
 function Calendar({ tasks, onUpdate }) {
     const [currentDate, setCurrentDate] = useState(new Date())
-    const [showModal, setShowModal] = useState(false)
-    const [showDetail, setShowDetail] = useState(false)
+    const [showDayPanel, setShowDayPanel] = useState(false)
     const [selectedDay, setSelectedDay] = useState(null)
-    const [selectedTask, setSelectedTask] = useState(null)
 
     const today = new Date()
 
@@ -41,17 +38,6 @@ function Calendar({ tasks, onUpdate }) {
     function getTasksForDay(day) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
         return tasks.filter(task => task.date === dateStr && !task.status)
-    }
-
-    function handleDayClick(day) {
-        const dayTasks = getTasksForDay(day)
-        setSelectedDay(day)
-        if (dayTasks.length > 0) {
-            setSelectedTask(dayTasks[0])
-            setShowDetail(true)
-        } else {
-            setShowModal(true)
-        }
     }
 
     return (
@@ -104,7 +90,10 @@ function Calendar({ tasks, onUpdate }) {
                     <div
                         key={day}
                         className={`calendar-cell ${isToday(day) ? 'today' : ''}`}
-                        onClick={() => handleDayClick(day)}
+                        onClick={() => {
+                            setSelectedDay(day)
+                            setShowDayPanel(true)
+                        }}
                     >
                         <span style={{ fontSize: '14px' }}>{day}</span>
                         <div className="task-dots">
@@ -115,20 +104,16 @@ function Calendar({ tasks, onUpdate }) {
                     </div>
                 ))}
             </div>
-            {showModal && (
-                <TaskModal
-                    onClose={() => {
-                        setShowModal(false)
+            {showDayPanel && selectedDay && (
+                <DayPanel
+                    day={selectedDay}
+                    month={month}
+                    year={year}
+                    tasks={tasks}
+                    onClose={() => setShowDayPanel(false)}
+                    onUpdate={() => {
                         onUpdate()
                     }}
-                    selectedDate={`${year}-${String(month + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`}
-                />
-            )}
-            {showDetail && selectedTask && (
-                <TaskDetail
-                    task={selectedTask}
-                    onClose={() => setShowDetail(false)}
-                    onUpdate={onUpdate}
                 />
             )}
         </div>

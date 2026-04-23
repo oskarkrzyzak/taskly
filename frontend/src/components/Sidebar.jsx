@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import TaskModal from './TaskModal'
+import TaskDetail from './TaskDetail'
 
 function Sidebar({ tasks, onUpdate }) {
     const [showModal, setShowModal] = useState(false)
+    const [showDetail, setShowDetail] = useState(false)
+    const [selectedTask, setSelectedTask] = useState(null)
     const today = new Date()
     const todayStr = today.toISOString().split('T')[0]
 
@@ -36,7 +39,14 @@ function Sidebar({ tasks, onUpdate }) {
                 <p style={{ color: '#888', fontSize: '14px' }}>No upcoming tasks</p>
             ) : (
                 upcoming.map(task => (
-                    <div key={task.id} className="sidebar-task">
+                    <div
+                        key={task.id}
+                        className="sidebar-task"
+                        onClick={() => {
+                            setSelectedTask(task)
+                            setShowDetail(true)
+                        }}
+                    >
                         <p className="sidebar-task-title">{task.title}</p>
                         <p className="sidebar-task-date">{task.date}</p>
                     </div>
@@ -49,6 +59,13 @@ function Sidebar({ tasks, onUpdate }) {
                         onUpdate()
                     }}
                     selectedDate={todayStr}
+                />
+            )}
+            {showDetail && selectedTask && (
+                <TaskDetail
+                    task={selectedTask}
+                    onClose={() => setShowDetail(false)}
+                    onUpdate={onUpdate}
                 />
             )}
         </div>
