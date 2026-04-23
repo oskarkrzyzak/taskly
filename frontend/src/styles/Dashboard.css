@@ -44,3 +44,35 @@
     flex-direction: column;
     gap: 12px;
 }
+.task-dots {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.task-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #378ADD;
+    display: inline-block;
+}
+.sidebar-task {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.sidebar-task-title {
+    font-weight: 500;
+    margin: 0 0 4px 0;
+}
+
+.sidebar-task-date {
+    font-size: 12px;
+    color: #888;
+    margin: 0;
+}
